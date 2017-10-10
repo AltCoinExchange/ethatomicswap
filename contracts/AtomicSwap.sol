@@ -8,6 +8,7 @@ contract AtomicSwap {
         uint initTimestamp;
         uint refundTime;
         bytes20 hashedSecret;
+        bytes32 secret;
         address initiator;
         address participant;
         uint256 value;
@@ -97,6 +98,7 @@ contract AtomicSwap {
         if(swaps[_hashedSecret].state == State.Initiator){
             swaps[_hashedSecret].participant.transfer(swaps[_hashedSecret].value);
         }
+        swaps[_hashedSecret].secret = _secret;
 	    Redeemed(block.timestamp);
 	}
 
