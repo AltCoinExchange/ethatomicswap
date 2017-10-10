@@ -1,0 +1,17 @@
+{
+  "name": "ethatomicswap",
+  "version": "0.1.0",
+  "description": "Ethereum Atomic Swap",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sulejman Sarajlija & Anto Brajkovic <sule@altcoinexchange.com>",
+  "license": "ISC",
+  "dependencies": {
+    "minimist": "^1.2.0",
+    "random-hex": "^1.0.2",
+    "ripemd160": "^2.0.1",
+    "web3": "^1.0.0-beta.23"
+  }
+}
