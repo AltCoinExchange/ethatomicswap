@@ -6,3 +6,5 @@ Do not use this on mainnet since it's not yet properly audited and still in test
 
 Contract is deployed to: https://rinkeby.etherscan.io/address/0xc10f3f7242267da0e732ef32e92ca517a5a68d65#code
 
+Gitter conversation: https://gitter.im/Altcoin-Exchange/ethatomicswap?utm_source=share-link&utm_medium=link&utm_campaign=share-link
+
