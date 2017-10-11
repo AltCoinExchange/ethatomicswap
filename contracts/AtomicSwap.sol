@@ -12,6 +12,7 @@ contract AtomicSwap {
         address initiator;
         address participant;
         uint256 value;
+        bool emptied;
         State state;
     }
 
@@ -38,11 +39,13 @@ contract AtomicSwap {
     
 	modifier isRefundable(bytes20 _hashedSecret) {
 	    require(block.timestamp < swaps[_hashedSecret].initTimestamp + swaps[_hashedSecret].refundTime);
+	    require(swaps[_hashedSecret].emptied == false);
 	    _;
 	}
 	
 	modifier isRedeemable(bytes20 _hashedSecret, bytes32 _secret) {
 	    require(ripemd160(_secret) == _hashedSecret);
+	    require(swaps[_hashedSecret].emptied == false);
 	    _;
 	}
 	
@@ -77,10 +80,12 @@ contract AtomicSwap {
 		);
 	}
 
-    function participate(bytes20 _hashedSecret,address _initiator) 
+    function participate(uint _refundTime, bytes20 _hashedSecret,address _initiator) 
         payable 
         isNotInitiated(_hashedSecret)
     {
+        swaps[_hashedSecret].refundTime = _refundTime;
+	    swaps[_hashedSecret].initTimestamp = block.timestamp;
         swaps[_hashedSecret].participant = msg.sender;
         swaps[_hashedSecret].initiator = _initiator;
         swaps[_hashedSecret].value = msg.value;
@@ -98,8 +103,9 @@ contract AtomicSwap {
         if(swaps[_hashedSecret].state == State.Initiator){
             swaps[_hashedSecret].participant.transfer(swaps[_hashedSecret].value);
         }
+        swaps[_hashedSecret].emptied = true;
+        Redeemed(block.timestamp);
         swaps[_hashedSecret].secret = _secret;
-	    Redeemed(block.timestamp);
 	}
 
 	function refund(bytes20 _hashedSecret)
@@ -111,6 +117,7 @@ contract AtomicSwap {
         if(swaps[_hashedSecret].state == State.Initiator){
             swaps[_hashedSecret].initiator.transfer(swaps[_hashedSecret].value);
         }
+        swaps[_hashedSecret].emptied = true;
 	    Refunded(block.timestamp);
 	}
 }

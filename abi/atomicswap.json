@@ -1,85 +1,217 @@
-[{
-    "constant": false,
-    "inputs": [{"name": "_hashedSecret", "type": "bytes20"}],
-    "name": "refund",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [{"name": "_hashedSecret", "type": "bytes20"}, {"name": "_initiator", "type": "address"}],
-    "name": "participate",
-    "outputs": [],
-    "payable": true,
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [{"name": "_secret", "type": "bytes32"}, {"name": "_hashedSecret", "type": "bytes20"}],
-    "name": "redeem",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [{"name": "_refundTime", "type": "uint256"}, {
-        "name": "_hashedSecret",
-        "type": "bytes20"
-    }, {"name": "_participant", "type": "address"}],
-    "name": "initiate",
-    "outputs": [],
-    "payable": true,
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [{"name": "", "type": "bytes20"}],
-    "name": "swaps",
-    "outputs": [{"name": "initTimestamp", "type": "uint256"}, {
-        "name": "refundTime",
-        "type": "uint256"
-    }, {"name": "hashedSecret", "type": "bytes20"}, {"name": "initiator", "type": "address"}, {
-        "name": "participant",
-        "type": "address"
-    }, {"name": "value", "type": "uint256"}, {"name": "state", "type": "uint8"}],
-    "payable": false,
-    "type": "function"
-}, {"inputs": [], "payable": false, "type": "constructor"}, {
-    "anonymous": false,
-    "inputs": [{"indexed": false, "name": "_refundTime", "type": "uint256"}],
-    "name": "Refunded",
-    "type": "event"
-}, {
-    "anonymous": false,
-    "inputs": [{"indexed": false, "name": "_redeemTime", "type": "uint256"}],
-    "name": "Redeemed",
-    "type": "event"
-}, {
-    "anonymous": false,
-    "inputs": [{"indexed": false, "name": "_initiator", "type": "address"}, {
-        "indexed": false,
-        "name": "_participator",
-        "type": "address"
-    }, {"indexed": false, "name": "_hashedSecret", "type": "bytes20"}, {
-        "indexed": false,
-        "name": "_value",
-        "type": "uint256"
-    }],
-    "name": "Participated",
-    "type": "event"
-}, {
-    "anonymous": false,
-    "inputs": [{"indexed": false, "name": "_initTimestamp", "type": "uint256"}, {
-        "indexed": false,
-        "name": "_refundTime",
-        "type": "uint256"
-    }, {"indexed": false, "name": "_hashedSecret", "type": "bytes20"}, {
-        "indexed": false,
-        "name": "_participant",
-        "type": "address"
-    }, {"indexed": false, "name": "_initiator", "type": "address"}, {
-        "indexed": false,
-        "name": "_funds",
-        "type": "uint256"
-    }],
-    "name": "Initiated",
-    "type": "event"
-}]
+[
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_refundTime",
+                "type": "uint256"
+            },
+            {
+                "name": "_hashedSecret",
+                "type": "bytes20"
+            },
+            {
+                "name": "_initiator",
+                "type": "address"
+            }
+        ],
+        "name": "participate",
+        "outputs": [],
+        "payable": true,
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_hashedSecret",
+                "type": "bytes20"
+            }
+        ],
+        "name": "refund",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_secret",
+                "type": "bytes32"
+            },
+            {
+                "name": "_hashedSecret",
+                "type": "bytes20"
+            }
+        ],
+        "name": "redeem",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_refundTime",
+                "type": "uint256"
+            },
+            {
+                "name": "_hashedSecret",
+                "type": "bytes20"
+            },
+            {
+                "name": "_participant",
+                "type": "address"
+            }
+        ],
+        "name": "initiate",
+        "outputs": [],
+        "payable": true,
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "bytes20"
+            }
+        ],
+        "name": "swaps",
+        "outputs": [
+            {
+                "name": "initTimestamp",
+                "type": "uint256"
+            },
+            {
+                "name": "refundTime",
+                "type": "uint256"
+            },
+            {
+                "name": "hashedSecret",
+                "type": "bytes20"
+            },
+            {
+                "name": "secret",
+                "type": "bytes32"
+            },
+            {
+                "name": "initiator",
+                "type": "address"
+            },
+            {
+                "name": "participant",
+                "type": "address"
+            },
+            {
+                "name": "value",
+                "type": "uint256"
+            },
+            {
+                "name": "emptied",
+                "type": "bool"
+            },
+            {
+                "name": "state",
+                "type": "uint8"
+            }
+        ],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "payable": false,
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "_refundTime",
+                "type": "uint256"
+            }
+        ],
+        "name": "Refunded",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "_redeemTime",
+                "type": "uint256"
+            }
+        ],
+        "name": "Redeemed",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "_initiator",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "_participator",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "_hashedSecret",
+                "type": "bytes20"
+            },
+            {
+                "indexed": false,
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "Participated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "_initTimestamp",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "_refundTime",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "_hashedSecret",
+                "type": "bytes20"
+            },
+            {
+                "indexed": false,
+                "name": "_participant",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "_initiator",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "_funds",
+                "type": "uint256"
+            }
+        ],
+        "name": "Initiated",
+        "type": "event"
+    }
+]
