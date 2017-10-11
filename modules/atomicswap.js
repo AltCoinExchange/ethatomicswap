@@ -24,9 +24,9 @@ var AtomicSwap = function (configuration, appConfiguration) {
      * @param amount - Amount to transfer
      * @constructor
      */
-    this.Initiate = function(refundTime, secret, address) {
-        this.web3.eth.defaultAccount = address;
-        this.contract.initiate.call(refundTime, secret, address);
+    this.Initiate = function(refundTime, secret, address) 
+    {
+
     };
 
     /**
