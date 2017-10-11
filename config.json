@@ -1,0 +1,4 @@
+{
+  "rpchost" : "http://localhost:8545",
+  "contractAddress": "0x6987449e26984156cb2423b5f39956B81d62bf7a"
+}

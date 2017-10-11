@@ -4,7 +4,7 @@
   "description": "Ethereum Atomic Swap",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "test/testatomicswap.js"
   },
   "author": "Sulejman Sarajlija & Anto Brajkovic <sule@altcoinexchange.com>",
   "license": "ISC",
@@ -13,5 +13,8 @@
     "random-hex": "^1.0.2",
     "ripemd160": "^2.0.1",
     "web3": "^1.0.0-beta.23"
+  },
+  "devDependencies": {
+    "jasmine": "^2.8.0"
   }
 }
