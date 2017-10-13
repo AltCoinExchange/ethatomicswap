@@ -9,10 +9,49 @@ var AtomicSwap = function (configuration, appConfiguration) {
     this.appConfig = appConfiguration;
     this.web3 = null;
     this.contract = null;
+    this.clone = require("clone");
+
     var Web3 = require("web3");
+
+    var getFunctionAbi = function(abi, name) {
+        for (var i = 0; i < abi.length; i++) {
+            if (abi[i].name == name)
+                return abi[i];
+        }
+    };
+
+    /**
+     * Call contract function
+     * @param name
+     * @param address
+     * @param params
+     * @param generalParams
+     */
+    this.callFunction = function(name, address, params, generalParams) {
+
+        var functionAbi = this.clone(getFunctionAbi(this.config, name));
+        var contract = new this.web3.eth.Contract(this.config, this.appConfig.contractAddress);
+
+        var funcObj = {};
+
+        funcObj._method = functionAbi;
+        funcObj._parent = contract;
+        funcObj.encodeABI = contract._encodeMethodABI.bind(funcObj);
+        funcObj.arguments = params;
+
+        var deploy = contract._executeMethod.call(funcObj, 'send', generalParams, function (err, result) {
+            console.log("Transaction hash:" + result);
+        })
+        .on('receipt', function(result){
+            console.log(result);
+            done();
+        }).catch(console.log);
+    };
 
     this.construct = function() {
         this.web3 = new Web3(new Web3.providers.HttpProvider(this.appConfig.rpchost));
+        this.web3.defaultAccount = this.appConfig.defaultWallet;
+        // Need to init first since it is throwing exception
         this.contract = new this.web3.eth.Contract(this.config, this.appConfig.contractAddress);
     };
 
@@ -20,13 +59,19 @@ var AtomicSwap = function (configuration, appConfiguration) {
 
     /**
      * Initiate atomic swap transfer
+     * @param refundTime
+     * @param secret - Secret
      * @param address - Participant address
      * @param amount - Amount to transfer
+     * @param gasPrice - Maximum GAS to spend
      * @constructor
      */
-    this.Initiate = function(refundTime, secret, address) 
+    this.Initiate = function(refundTime, secret, address, amount, gasPrice)
     {
-
+        return this.callFunction("initiate", address,
+            [refundTime, secret, address],
+            // TODO: Parse values
+            {from: this.appConfig.defaultWallet, gasPrice: gasPrice, value: this.web3.utils.toWei(amount, 'milliether') });
     };
 
     /**
@@ -51,7 +96,7 @@ var AtomicSwap = function (configuration, appConfiguration) {
      */
     this.Redeem = function (secret) 
     {
-        
+
     };
 
     /**

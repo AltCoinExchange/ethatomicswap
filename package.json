@@ -9,6 +9,10 @@
   "author": "Sulejman Sarajlija & Anto Brajkovic <sule@altcoinexchange.com>",
   "license": "ISC",
   "dependencies": {
+    "bignumber.js": "^4.1.0",
+    "clone": "^2.1.1",
+    "crypto": "^1.0.1",
+    "crypto-js": "^3.1.9-1",
     "minimist": "^1.2.0",
     "random-hex": "^1.0.2",
     "ripemd160": "^2.0.1",
