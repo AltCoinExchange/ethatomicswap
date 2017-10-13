@@ -1,5 +1,5 @@
 {
   "rpchost" : "http://localhost:8545",
   "contractAddress": "0xc10f3f7242267da0e732ef32e92ca517a5a68d65",
-  "defaultWallet": "0xb483f5a8c6ebA74Dc1bcef9D167E6B86Caa4C773"
+  "defaultWallet": ""
 }
