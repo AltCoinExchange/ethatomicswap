@@ -14,12 +14,14 @@ var argv = require('minimist')(process.argv.slice(2), opts={string:"_"});
 
 var help = "Usage: ethatomicswap [cmd] [params] \n\n" +
     "initiate <refundTime> <hashedSecret> <participantAddress> <amount> <gasPrice> \n" +
-    "participate <secret> <initiatorAddress> \n" +
+    "participate <refundTime> <hashedSecret> <initiatorAddress> \n" +
     "redeem <secret> <hashedSecret> \n" +
     "refund <hashedSecret> \n";
 
 // Available commands
 var _commands = ["initiate", "participate", "redeem", "refund"];
+
+argv._[0] = argv._[0].toLowerCase();
 
 // Check for available commands
 if (_commands.indexOf(argv._[0]) == -1) {
@@ -28,10 +30,15 @@ if (_commands.indexOf(argv._[0]) == -1) {
 }
 
 try {
-    var swap = new AtomicSwap(AbiConfig, AppConfig);
+    var swap = new AtomicSwap(AbiConfig, AppConfig.hosts[0]);
     if (argv._[0] == "initiate")
-        swap.Initiate(argv._[1], argv._[2], argv._[3], argv._[4], argv._[5]);
-
+        swap.Initiate(argv._[1], argv._[2], argv._[3], argv._[4], argv._[5]).then(function(result) {
+            console.log("Initiated with transaction number: " + result);
+        });
+    else if (argv._[0] == "participate")
+        swap.Participate(argv._[1], argv._[2], argv._[3]).then(function(result) {
+            console.log("Participated with transaction number: " + result);
+        });
 } catch (e) {
     console.log(e);
 }

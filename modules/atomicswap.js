@@ -39,13 +39,23 @@ var AtomicSwap = function (configuration, appConfiguration) {
         funcObj.encodeABI = contract._encodeMethodABI.bind(funcObj);
         funcObj.arguments = params;
 
-        var deploy = contract._executeMethod.call(funcObj, 'send', generalParams, function (err, result) {
-            console.log("Transaction hash:" + result);
-        })
-        .on('receipt', function(result){
-            console.log(result);
-            done();
-        }).catch(console.log);
+        return new Promise(function (resolve, reject) {
+            contract._executeMethod.call(funcObj, 'send', generalParams, function (err, result) {
+                if (err)
+                    reject(err);
+                else
+                    resolve(result);
+            })
+            .on('receipt', function(result){
+                console.log(result);
+                resolve(result);
+            }).catch(function(err) {
+                console.log(err);
+                reject(err);
+            });
+        });
+
+        //return deploy;
     };
 
     this.construct = function() {
@@ -60,7 +70,7 @@ var AtomicSwap = function (configuration, appConfiguration) {
     /**
      * Initiate atomic swap transfer
      * @param refundTime
-     * @param secret - Secret
+     * @param secret - Secret hash
      * @param address - Participant address
      * @param amount - Amount to transfer
      * @param gasPrice - Maximum GAS to spend
@@ -71,18 +81,22 @@ var AtomicSwap = function (configuration, appConfiguration) {
         return this.callFunction("initiate", address,
             [refundTime, secret, address],
             // TODO: Parse values
-            {from: this.appConfig.defaultWallet, gasPrice: gasPrice, value: this.web3.utils.toWei(amount, 'milliether') });
+            {from: this.appConfig.defaultWallet, gasPrice: gasPrice, value: this.web3.utils.toWei(amount, 'milliether') }
+            );
     };
 
     /**
      * Participate to atomic swap transfer
-     * @param address - Initiator address
-     * @param amount - Amount to transfer
+     * @param refundTime
      * @param secret - Secret hash
+     * @param address - Participant address
      */
-    this.Participate = function (address, amount, secret) 
+    this.Participate = function (refundTime, secret, address)
     {
-
+        return this.callFunction("participate", address,
+            [refundTime, secret, address],
+            // TODO: Parse values
+            {from: this.appConfig.defaultWallet});
     };
 
     /**

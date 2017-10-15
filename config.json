@@ -1,5 +1,14 @@
 {
-  "rpchost" : "http://localhost:8545",
-  "contractAddress": "0xc10f3f7242267da0e732ef32e92ca517a5a68d65",
-  "defaultWallet": ""
+  "hosts" : [
+    {
+      "rpchost": "http://localhost:8545",
+      "contractAddress": "0xc10f3f7242267da0e732ef32e92ca517a5a68d65",
+      "defaultWallet": ""
+    },
+    {
+      "rpchost": "http://localhost:8546",
+      "contractAddress": "0xc10f3f7242267da0e732ef32e92ca517a5a68d65",
+      "defaultWallet": ""
+    }
+  ]
 }
