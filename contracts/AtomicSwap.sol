@@ -38,13 +38,14 @@ contract AtomicSwap {
 	function AtomicSwap() {}
     
 	modifier isRefundable(bytes20 _hashedSecret) {
-	    require(block.timestamp < swaps[_hashedSecret].initTimestamp + swaps[_hashedSecret].refundTime);
+	    require(block.timestamp > swaps[_hashedSecret].initTimestamp + swaps[_hashedSecret].refundTime);
 	    require(swaps[_hashedSecret].emptied == false);
 	    _;
 	}
 	
 	modifier isRedeemable(bytes20 _hashedSecret, bytes32 _secret) {
 	    require(ripemd160(_secret) == _hashedSecret);
+		require(block.timestamp < swaps[_hashedSecret].initTimestamp + swaps[_hashedSecret].refundTime);
 	    require(swaps[_hashedSecret].emptied == false);
 	    _;
 	}
