@@ -1,14 +1,14 @@
 {
   "hosts" : [
     {
-      "rpchost": "http://localhost:8545",
+      "wshost": "ws://rinkeby.infura.io:8546",
       "contractAddress": "0x6d5ae9dd8f1a2582deb1b096915313459f11ba70",
-      "defaultWallet": ""
+      "defaultWallet": "0xb483f5a8c6ebA74Dc1bcef9D167E6B86Caa4C773"
     },
     {
-      "rpchost": "http://localhost:8546",
+      "wshost": "ws://localhost:8547",
       "contractAddress": "0x6d5ae9dd8f1a2582deb1b096915313459f11ba70",
-      "defaultWallet": ""
+      "defaultWallet": "0x21Fa313f2144f6E1348d91FbF0C6A3a5EEcC056D"
     }
   ]
 }

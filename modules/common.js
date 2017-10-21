@@ -24,6 +24,29 @@ var Common = function () {
         console.log("\Hashed Secret:\t\t", hashedSecret, "\n");
 
         return { "secret": secret, "hashedSecret": hashedSecret };
+    };
+
+    /**
+     * Extend object
+     * @param target
+     * @param source
+     * @param exclude
+     * @returns {*}
+     * @constructor
+     */
+    this.Extend = function(target, source, exclude) {
+        if (source) {
+            for(var prop in source) {
+                if (exclude && exclude.indexOf(prop) != -1) {
+                    continue;
+                }
+
+                if(source.hasOwnProperty(prop)) {
+                    target[prop] = source[prop];
+                }
+            }
+        }
+        return target;
     }
 };
 

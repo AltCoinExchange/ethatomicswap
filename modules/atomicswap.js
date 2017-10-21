@@ -1,71 +1,24 @@
 /**
  * Atomic swap class
- * 
+ *
  * @author Djenad Razic
  * @company Altcoin Exchange, Inc.
  */
-var AtomicSwap = function (configuration, appConfiguration) {
-    this.config = configuration;
-    this.appConfig = appConfiguration;
-    this.web3 = null;
-    this.contract = null;
-    this.clone = require("clone");
-
-    var Web3 = require("web3");
-
-    var getFunctionAbi = function(abi, name) {
-        for (var i = 0; i < abi.length; i++) {
-            if (abi[i].name == name)
-                return abi[i];
-        }
-    };
+var AtomicSwap;
+AtomicSwap = function (configuration, appConfiguration) {
+    this.engine = null;
 
     /**
-     * Call contract function
-     * @param name
-     * @param address
-     * @param params
-     * @param generalParams
+     * @param configuration
+     * @param appConfiguration
      */
-    this.callFunction = function(name, address, params, generalParams) {
-
-        var functionAbi = this.clone(getFunctionAbi(this.config, name));
-        var contract = new this.web3.eth.Contract(this.config, this.appConfig.contractAddress);
-
-        var funcObj = {};
-
-        funcObj._method = functionAbi;
-        funcObj._parent = contract;
-        funcObj.encodeABI = contract._encodeMethodABI.bind(funcObj);
-        funcObj.arguments = params;
-
-        return new Promise(function (resolve, reject) {
-            contract._executeMethod.call(funcObj, 'send', generalParams, function (err, result) {
-                if (err)
-                    reject(err);
-                else
-                    resolve(result);
-            })
-            .on('receipt', function(result){
-                console.log(result);
-                resolve(result);
-            }).catch(function(err) {
-                console.log(err);
-                reject(err);
-            });
-        });
-
-        //return deploy;
+    this.construct = function (configuration, appConfiguration) {
+        var Engine = require("./engine");
+        this.engine = new Engine(configuration, appConfiguration);
+        this.engine.common.Extend(this, this.engine);
     };
 
-    this.construct = function() {
-        this.web3 = new Web3(new Web3.providers.HttpProvider(this.appConfig.rpchost));
-        this.web3.defaultAccount = this.appConfig.defaultWallet;
-        // Need to init first since it is throwing exception
-        this.contract = new this.web3.eth.Contract(this.config, this.appConfig.contractAddress);
-    };
-
-    this.construct();
+    this.construct(configuration, appConfiguration);
 
     /**
      * Initiate atomic swap transfer
@@ -73,16 +26,19 @@ var AtomicSwap = function (configuration, appConfiguration) {
      * @param secret - Secret hash
      * @param address - Participant address
      * @param amount - Amount to transfer
-     * @param gasPrice - Maximum GAS to spend
+     * @param extendedParams
      * @constructor
      */
-    this.Initiate = function(refundTime, secret, address, amount, gasPrice)
-    {
-        return this.callFunction("initiate", address,
-            [refundTime, secret, address],
-            // TODO: Parse values
-            {from: this.appConfig.defaultWallet, gasPrice: gasPrice, value: this.web3.utils.toWei(amount, 'milliether') }
-            );
+    this.Initiate = function (refundTime, secret, address, amount, extendedParams) {
+        var conversion = (extendedParams && extendedParams.conversion) ? extendedParams.conversion : 'milliether';
+
+        var params = {
+            from: this.appConfig.defaultWallet,
+            value: this.web3.utils.toWei(amount, conversion)
+        };
+
+        this.engine.common.Extend(params, extendedParams, ["conversion"]);
+        return this.engine.callFunction("initiate", [refundTime, secret, address], params);
     };
 
     /**
@@ -90,56 +46,51 @@ var AtomicSwap = function (configuration, appConfiguration) {
      * @param refundTime
      * @param secret - Secret hash
      * @param address - Participant address
+     * @param amount
+     * @param extendedParams
      */
-    this.Participate = function (refundTime, secret, address)
-    {
-        return this.callFunction("participate", address,
-            [refundTime, secret, address],
-            // TODO: Parse values
-            {from: this.appConfig.defaultWallet});
-    };
+    this.Participate = function (refundTime, secret, address, amount, extendedParams) {
+        var conversion = (extendedParams && extendedParams.conversion) ? extendedParams.conversion : 'milliether';
 
-    /**
-     *
-     * Secret: secret
-     */
+        var params = {
+            from: this.appConfig.defaultWallet,
+            value: this.web3.utils.toWei(amount, conversion)
+        };
+
+        this.engine.common.Extend(params, extendedParams, ["conversion"]);
+        return this.engine.callFunction("participate", [refundTime, secret, address], params);
+    };
 
     /**
      * Redeem funds with given secret
      * @param secret - Secret hash
+     * @param hashedSecret
+     * @param extendedParams
      */
-    this.Redeem = function (secret) 
-    {
+    this.Redeem = function (secret, hashedSecret, extendedParams) {
 
+        var params = {
+            from: this.appConfig.defaultWallet
+        };
+
+        this.engine.common.Extend(params, extendedParams);
+        return this.callFunction("redeem", [secret, hashedSecret], params);
     };
 
     /**
      * Refund contract transaction
-     * @param secret - Secret hash
+     * @param hashedSecret
+     * @param extendedParams
      */
-    this.Refund = function (secret) 
-    {
+    this.Refund = function (hashedSecret, extendedParams) {
 
+        var params = {
+            from: this.appConfig.defaultWallet
+        };
+
+        this.engine.common.Extend(params, extendedParams);
+        return this.callFunction("refund", [hashedSecret], params);
     };
-
-    /**
-     * Extract secret from initiator's redemption transaction
-     * Secret: secret
-     * @param secret - Secret hash
-     */
-    this.ExtractSecret = function(secret)
-    {
-
-    };
-
-    /**
-     * Inspect contract
-     * @oaram secret - Secret hash
-     */
-    this.AuditContract = function(secret) 
-    {
-        
-    }        
 };
 
 module.exports = AtomicSwap;

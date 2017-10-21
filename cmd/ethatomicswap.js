@@ -13,8 +13,8 @@ var AtomicSwap = require("../modules/atomicswap");
 var argv = require('minimist')(process.argv.slice(2), opts={string:"_"});
 
 var help = "Usage: ethatomicswap [cmd] [params] \n\n" +
-    "initiate <refundTime> <hashedSecret> <participantAddress> <amount> <gasPrice> \n" +
-    "participate <refundTime> <hashedSecret> <initiatorAddress> \n" +
+    "initiate <refundTime> <hashedSecret> <participantAddress> <amount> \n" +
+    "participate <refundTime> <hashedSecret> <initiatorAddress> <amount> \n" +
     "redeem <secret> <hashedSecret> \n" +
     "refund <hashedSecret> \n";
 
@@ -36,9 +36,18 @@ try {
             console.log("Initiated with transaction number: " + result);
         });
     else if (argv._[0] == "participate")
-        swap.Participate(argv._[1], argv._[2], argv._[3]).then(function(result) {
+        swap.Participate(argv._[1], argv._[2], argv._[3], argv._[4], argv._[5]).then(function(result) {
             console.log("Participated with transaction number: " + result);
         });
+    else if (argv._[0] == "redeem")
+        swap.Redeem(argv._[1], argv._[2], argv._[3]).then(function(result) {
+            console.log("Redeemed with transaction number: " + result);
+        });
+    else if (argv._[0] == "refund")
+        swap.Refund(argv._[1], argv._[2]).then(function(result) {
+            console.log("Refunded with transaction number: " + result);
+        });
+
 } catch (e) {
     console.log(e);
 }
