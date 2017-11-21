@@ -2,7 +2,7 @@
 
 Created by: www.altcoinexchange.com
 
-This is Ethereum version of atomic swap compatible for use with existing Bitcoin, Litecoin and Vertcoin in this repo: https://github.com/decred/atomicswap
+This is Ethereum version of atomic swap compatible for use with existing Bitcoin, Litecoin, Vertcoin and Particl in this repo: https://github.com/decred/atomicswap
 
 Do not use this on mainnet since it's not yet properly audited and still in testing. Documentation and web3 client command line tool coming soon. Contributions and issues are welcome.
 
